@@ -1,5 +1,9 @@
 LogDashboard::Application.routes.draw do
+  match 'resources/:id/flush' => 'resources#flush', :as => 'flush_resource'
+  resources :resources
+
   get "dashboard/index"
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

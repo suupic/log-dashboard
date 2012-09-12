@@ -1,2 +1,18 @@
-<h1>Dashboard#index</h1>
-<p>Find me in app/views/dashboard/index.html.erb</p>
+
+
+<h1>Dashboard</h1>
+
+<% @resources.each do |resource| %>
+  <div class='stream'><%= "#{resource.name}"%> </div>
+
+
+
+<%= javascript_tag do %>
+jQuery(document).ready(function() {
+  var faye = new Faye.Client('http://localhost:9292/faye');  
+  faye.subscribe('/logs/<%= "#{resource.name}" %>', function (data) {  
+    $('.stream').append("<div>" + data.message[0].message + "</div>");  
+  });  
+});  
+<% end %>
+<% end %>
