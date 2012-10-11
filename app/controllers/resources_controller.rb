@@ -84,12 +84,43 @@ class ResourcesController < ApplicationController
   def flush
     @resource = Resource.find(params[:id])
     if @resource
-      message = {:channel => "/logs/#{@resource.name}", :data => { :resource_id => @resource.id, :message => RealtimeCache.new.pop(@resource.collection)}}
-      
-      #message = {:channel => '/messages/new', :data => { :resource_id => @resource.id, :message => RealtimeCache.new.pop}}
+      message = {:channel => "/logs/#{@resource.name}", :data => { :resource_id => @resource.id, :message => RealtimeCache.new.pull(@resource.collection) }}
       uri = URI.parse("http://localhost:9292/faye")
       Net::HTTP.post_form(uri, :message => message.to_json)
     end
     render :nothing => true
   end
+
+  def pull    
+    @resource = Resource.find(params[:id])
+    if params[:resource]
+      time_string = "#{params[:resource]['search_start_at(1i)']}-#{params[:resource]['search_start_at(2i)']}-#{params[:resource]['search_start_at(3i)']} #{params[:resource]['search_start_at(4i)']}:#{params[:resource]['search_start_at(5i)']}"
+      @resource.search_start_at = Time.parse(time_string).in_time_zone('Beijing')
+      
+      @resource.search_limit_count = params[:resource][:search_limit_count].to_i
+      @logdata = RealtimeCache.new.pull(@resource.collection, @resource.search_start_at, @resource.search_limit_count)      
+    else 
+      @resource.search_start_at = Time.now - 1.hour
+      @resource.search_limit_count = 500
+    end
+
+   # @resource.search_limit_count = params[:search]
+
+=begin
+
+    if request.headers['X-PJAX']
+      render :layout => false
+    end =end
+
+
+=begin
+    respond_to do |format|
+        format.html
+        format.json { render json: @resource, json: @logdata }
+    end    
+=end
+
+  end
+
+
 end

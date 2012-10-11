@@ -12,6 +12,8 @@ gem 'faye'
 gem 'mongo'
 gem 'bson_ext'
 gem 'thin'
+gem 'pjax_rails', '~>0.3.3'
+gem 'meta_search', '~>1.1.3'
 
 # Gems used only for assets and not required
 # in production environments by default.

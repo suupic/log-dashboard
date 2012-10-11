@@ -23,3 +23,37 @@
 
 <%= link_to 'Edit', edit_resource_path(@resource) %> |
 <%= link_to 'Back', resources_path %>
+
+ <div class="stream">
+  <%= "#{@resource.name}"%><%= link_to 'Show', pull_resource_path(@resource), :class => 'btn btn-primary' %>
+  <textarea> 
+    <% if @data %>
+        <%= @data.count %>
+      <% @data.to_enum.each do |d|  %>
+        <%= "#{d}" %>
+      <% end %>
+    <% else %>
+      no data
+    <% end %>
+  </textarea>
+ </div>
+
+ <div class="stream <%= "stream_resource_#{@resource.name}" %>">
+  <%= "#{@resource.name}"%><%= link_to 'Flush', flush_resource_path(@resource), :remote => true, :class => 'btn btn-primary' %>
+  <textarea> 
+  </textarea>
+ </div>
+
+<%= javascript_tag do %>
+	jQuery(document).ready(function() {
+	  var faye = new Faye.Client('http://localhost:9292/faye');  
+	  faye.subscribe('/logs/<%= "#{@resource.name}" %>', function (data) {  
+			resource_text = $('.<%= "stream_resource_#{@resource.name} textarea" %>');
+		  $.each(data.message, function(index, value){
+		    console.log(index);
+		  	resource_text.val(resource_text.val() + value.message + index + "\n");
+		  });	
+	  });  
+	});  
+<% end %>
+

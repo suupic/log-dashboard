@@ -1,5 +1,6 @@
 LogDashboard::Application.routes.draw do
   match 'resources/:id/flush' => 'resources#flush', :as => 'flush_resource'
+  match 'resources/:id/pull' => 'resources#pull', :as => 'pull_resource'
   resources :resources
 
   get "dashboard/index"

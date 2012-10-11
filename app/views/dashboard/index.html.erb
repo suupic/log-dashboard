@@ -2,17 +2,28 @@
 
 <h1>Dashboard</h1>
 
-<% @resources.each do |resource| %>
-  <div class='stream'><%= "#{resource.name}"%> </div>
-
-
-
-<%= javascript_tag do %>
-jQuery(document).ready(function() {
-  var faye = new Faye.Client('http://localhost:9292/faye');  
-  faye.subscribe('/logs/<%= "#{resource.name}" %>', function (data) {  
-    $('.stream').append("<div>" + data.message[0].message + "</div>");  
-  });  
-});  
+<%= simple_form_for resources_path do |f| %>
+  <%= f.input :start_time, :as => :datetime %>
+  <%= f.button :submit %>
 <% end %>
+
+<% @resources.each do |resource| %>
+  <div class="stream <%= "stream_resource_#{resource.name}" %>">
+  	<%= "#{resource.name}"%><%= link_to 'Flush', flush_resource_path(resource), :remote => true, :class => 'btn btn-primary' %>
+  	<textarea> 
+  	</textarea>
+  </div>
+
+	<%= javascript_tag do %>
+		jQuery(document).ready(function() {
+		  var faye = new Faye.Client('http://localhost:9292/faye');  
+		  faye.subscribe('/logs/<%= "#{resource.name}" %>', function (data) {  
+		    resource_text = $('.<%= "stream_resource_#{resource.name} textarea" %>');
+		    $.each(data.message, function(index, value){
+		      console.log(value);
+		    	resource_text.append(value.message + "\n");
+		  	});		    
+		  });  
+		});  
+	<% end %>
 <% end %>

@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @resource.name %>
+</p>
+
+<p>
+  <b>Database:</b>
+  <%= @resource.database %>
+</p>
+
+<p>
+  <b>Collection:</b>
+  <%= @resource.collection %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @resource.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_path(@resource) %> |
+<%= link_to 'Back', resources_path %>
+
+<%= Time.now %>
+<%= form_for @resource, :url => pull_resource_path, :html => {:method => :get} do |f| %>  
+  <%= f.label :search_start_at, 'Start at:' %>
+  <%= f.datetime_select :search_start_at,  :include_blank => true %><br />
+  <%= f.label :search_limit_count, 'Limit' %>
+  <%= f.text_field :search_limit_count, :include_blank => true %><br />
+  <!-- etc... -->
+  <%= f.submit 'Refresh'%>
+<% end %>
+
+  <table class="table" style="word-wrap:break-word;table-layout: fixed;" >    
+    <tr>
+      <td style="width:150px">Time</td>
+      <td>Message</td>
+    </tr>
+    <% if @logdata %>    
+      <%= @logdata.count %>
+      <% @logdata.to_enum.each do |d|  %>
+        <tr>
+          <td><%= d["time"].in_time_zone('Beijing').strftime('%Y/%m/%d %H:%M:%S') %></td>
+          <td >
+            <%= d["message"] %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      no logdata
+    <% end %>
+  </table>
+
+
