@@ -10,7 +10,7 @@ class RealtimeCache
 
   def pull(collection_name, start_at, record_limit = 10 )
     collection = @fluentd["#{collection_name}"]
-    collection.find(time: {"$gt" => start_at.utc}).sort({time: 1}).limit(record_limit)
+    collection.find(time: {"$gte" => start_at.utc}).sort({time: 1}).limit(record_limit)
   end
 
 	def create_cursor_conf(collection, conf)

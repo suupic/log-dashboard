@@ -1,5 +1,8 @@
 LogDashboard::Application.routes.draw do
+  devise_for :users
+
   match 'resources/:id/flush' => 'resources#flush', :as => 'flush_resource'
+  match 'resources/:id/config_file' => 'resources#config_file', :as => 'config_file_resource'
   match 'resources/:id/pull' => 'resources#pull', :as => 'pull_resource'
   resources :resources
 

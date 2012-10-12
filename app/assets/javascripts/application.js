@@ -12,11 +12,14 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
 //= require twitter/bootstrap
 //= require jquery.pjax
 //= require_tree .
 
-
-$(function() {
-  $('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])').pjax('[data-pjax-container]');
+$(document).ready(function(){
+	$('.datepicker').datepicker({
+		changeMonth: true,
+    changeYear: true
+	});
 });

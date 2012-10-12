@@ -103,23 +103,41 @@ class ResourcesController < ApplicationController
       @resource.search_start_at = Time.now - 1.hour
       @resource.search_limit_count = 500
     end
+  end
 
-   # @resource.search_limit_count = params[:search]
+  def config_file
+    @resource = Resource.find(params[:id])
+    template = %q{
+    <source>
+      type tail
+      format /^(?<message>.*)$/
+      path /opt/App/nginx/logs/<%= @resource.name %>
+      tag mongo.<%= @resource.name %>
+    </source>
 
-=begin
+    <match mongo.<%= @resource.name %>>
+      # plugin type
+      type mongo
 
-    if request.headers['X-PJAX']
-      render :layout => false
-    end =end
+      # mongodb db + collection
+      database <%= @resource.database %>
+      collection <%= @resource.collection %>
 
+      capped
+      capped_size 100m
 
-=begin
-    respond_to do |format|
-        format.html
-        format.json { render json: @resource, json: @logdata }
-    end    
-=end
+      # mongodb host + port
+      host 172.16.3.53
+      port 27017
 
+      # interval
+      flush_interval 3s
+    </match>
+              }.gsub(/^  /, '')
+
+    erb = ERB.new(template, 0, "%<>")
+    @config_file = erb.result(binding)
+    p @config_file
   end
 
 

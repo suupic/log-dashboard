@@ -46,11 +46,28 @@
           </a>
           <a class="brand" href="#">LogDashboard</a>
           <div class="container nav-collapse">
-            <ul class="nav">
-              <li><%= link_to "Dashboard", dashboard_index_path  %></li>
-              <li><%= link_to "Resource", resources_path  %></li>
-              <li><%= link_to "Link3", "/path3"  %></li>
-            </ul>
+            <%if user_signed_in? %>
+              <ul class="nav">
+                <li><%= link_to '<i class="icon-hdd icon-white"></i> Dashboard'.html_safe, dashboard_index_path  %></li>
+                <li><%= link_to '<i class="icon-play-circle icon-white"></i> Resource'.html_safe, resources_path  %></li>
+              </ul>
+              <ul class="nav" style = "float: right">
+               <li class="dropdown" id="menu1">
+                 <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+                   <%= current_user.email %>
+                   <b class="caret"></b>
+                 </a>
+                 <ul class="dropdown-menu">
+                   <li><%= link_to '<i class="icon-user icon-black"></i> 账户设置'.html_safe, edit_user_registration_path %></li>
+                   <li><%= link_to '<i class="icon-off icon-black"></i> 注销'.html_safe, destroy_user_session_path, :method => :delete %></li>
+                 </ul>
+                </li>
+              </ul>
+            <% else %>
+              <ul class="nav" style = "float: right">
+                <li><%= link_to "登录", new_user_session_path  %></li>
+              </ul>
+            <% end %>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -60,6 +77,13 @@
       <div class="content">
         <div class="row">
            <div class="span12">
+            <% if notice %>
+              <p class="notice"><%= notice %></p>
+            <% end %>
+            <% if alert %>
+              <p class="alert"><%= alert %></p>
+            <% end %>
+
               <div data-pjax-container>
                 <%= yield %>
               </div>

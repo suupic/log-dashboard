@@ -13,13 +13,14 @@ gem 'mongo'
 gem 'bson_ext'
 gem 'thin'
 gem 'pjax_rails', '~>0.3.3'
-gem 'meta_search', '~>1.1.3'
+gem 'devise','~>2.1.2'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
+  gem 'jquery-ui-rails', '~>2.0.2'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby

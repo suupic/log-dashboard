@@ -21,6 +21,7 @@
     <td><%= link_to 'Edit', edit_resource_path(resource) %></td>
     <td><%= link_to 'flush', flush_resource_path(resource), :remote => true %></td>
     <td><%= link_to 'pull', pull_resource_path(resource) %></td>
+    <td><%= link_to 'config file', config_file_resource_path(resource) %></td>
     <td><%= link_to 'Destroy', resource, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
